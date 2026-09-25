@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation: Make Her Smile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --primary-hover: #ff758f;
+            --bg-dark: #0f0c1b;
+            --card-bg: rgba(25d, 20, 45, 0.75);
+            --text: #fff0f5;
+            --accent: #ffb3c1;
+            --gold: #ffb703;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0d0814 0%, #1a0b2e 50%, #2b0826 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Container & Navigation */
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 77, 109, 0.2);
+            position: relative;
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.6s cubic-bezier(0.39, 0.575, 0.565, 1) forwards;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+        }
+
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.2rem; }
+        h3 { font-size: 1.8rem; }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: #eaebed;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .quote-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--primary), #c9184a);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.6);
+            background: linear-gradient(45deg, #ff758f, var(--primary));
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 179, 193, 0.1);
+            color: white;
+        }
+
+        /* Mission Terminal */
+        .terminal {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #33ff33;
+            margin: 20px 0;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .terminal p {
+            color: #33ff33;
+            font-family: monospace;
+            margin-bottom: 8px;
+        }
+
+        /* Interactive Kit Grid */
+        .kit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .kit-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .kit-card:hover {
+            background: rgba(255, 77, 109, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .kit-card span {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Image Display Frame */
+        .img-container {
+            width: 100%;
+            max-height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .img-fallback {
+            padding: 20px;
+            text-align: center;
+            color: #ccc;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.4s ease;
+        }
+
+        /* Modal Popups */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #1a0b2e;
+            border: 2px solid var(--primary);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Gallery Slider Controls */
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .gallery-counter {
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        /* Runaway Proposal Area */
+        .proposal-area {
+            position: relative;
+            height: 120px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #no-btn {
+            position: absolute;
+            transition: all 0.15s ease-out;
+            z-index: 10;
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="app-container">
+
+        <!-- SLIDE 1: MISSION BRIEFING -->
+        <div class="slide active" id="slide-1">
+            <h1>Operation: Make Her Smile</h1>
+            <div class="terminal">
+                <p>> MISSION STATUS: CRITICAL 🚨</p>
+                <p>> SUBJECT: Monuuuuuuuuuu Babyyyyyyyyyyy</p>
+                <p>> CURRENT CONDITION: Slightly annoyed / Sad / Definitely adorable</p>
+                <p>> KNOWN CAUSE: Last night's miscommunication</p>
+                <p>> OBJECTIVE: Make Subject Smile & Remind Her She Is Everything</p>
+                <p>> PROBABILITY OF SUCCESS: 100% (Nannnuuuuuuuu is working hard on it)</p>
+            </div>
+            <p>Hey Monuuuuuuuuuu Babyyyyyyyyyyy... My detective license may have expired, and I might not always get things right immediately, but I know one thing for absolute certain: <strong>I never want you to feel sad or alone.</strong></p>
+            <div class="quote-box">
+                "Angya! I love you Monuuuuuuuuuu Babyyyyyyyyyyy I'm ready to marry you looooooooo."
+            </div>
+            <p>I built this little space just for you. Take a breath, step inside, and let me try to bring that beautiful smile back to your face.</p>
+        </div>
+
+        <!-- SLIDE 2: MOOD REPAIR KIT -->
+        <div class="slide" id="slide-2">
+            <h2>Digital Mood Repair Kit 🧰</h2>
+            <p>Choose whatever you need right now, Monuuuuuuuuuu. I'm right here for you.</p>
+            
+            <div class="kit-grid">
+                <div class="kit-card" onclick="openModal('hug-modal')">
+                    <span>🫂</span>
+                    <h4>Virtual Hug</h4>
+                    <p>Deploying warmth...</p>
+                </div>
+                <div class="kit-card" onclick="openModal('meme-modal')">
+                    <span>😂</span>
+                    <h4>Make Me Laugh</h4>
+                    <p>Cat meme emergency</p>
+                </div>
+                <div class="kit-card" onclick="openModal('compliment-modal')">
+                    <span>🥺</span>
+                    <h4>Sweet Truths</h4>
+                    <p>3 things I adore about you</p>
+                </div>
+                <div class="kit-card" onclick="openModal('talk-modal')">
+                    <span>🗣️</span>
+                    <h4>Safe Space</h4>
+                    <p>I am listening</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: OUR STORY & MEMORIES -->
+        <div class="slide" id="slide-3">
+            <h2>Our Journey So Far 🚂</h2>
+            <p>From a random connection on LinkedIn to the moments on a moving train that changed everything for me...</p>
+
+            <div class="quote-box">
+                <strong>How We Met:</strong> We ironically first crossed paths on LinkedIn, but the real magic happened physically on a moving train. That care you showed me on the train... that's when I knew you were truly special.
+            </div>
+
+            <p>Every single thing you do melts my heart. And then there's <strong>Loluuu babyyyy</strong>! Whenever you send me videos with that adorable kid, I end up laughing and smiling at the screen like an idiot.</p>
+            
+            <p>We haven't had our official first date yet, but I am counting down the days until we do. Every second waiting for it is going to be worth it.</p>
+        </div>
+
+        <!-- SLIDE 4: CUTE PHOTOS GALLERY -->
+        <div class="slide" id="slide-4">
+            <h2>Your Cutest Moments ✨</h2>
+            <p>Look at how absolute gorgeous and cute you are, Monuuuuuuuuuu!</p>
+            
+            <div class="img-container">
+                <img id="cute-img-display" src="DSC 0587.JPG" alt="Cute Photo" onerror="handleImgError(this, 'cute-fallback')">
+                <div id="cute-fallback" class="img-fallback hidden">
+                    <p>🖼️ <strong>Cute Photo Frame</strong></p>
+                    <p id="cute-file-name" style="font-size:0.8rem; color:#aaa;">DSC 0587.JPG</p>
+                    <label class="file-input-label">Select Photo from Device
+                        <input type="file" class="file-input" accept="image/*" onchange="loadLocalImage(event, 'cute-img-display', 'cute-fallback')">
+                    </label>
+                </div>
+            </div>
+
+            <div class="gallery-controls">
+                <button class="btn btn-secondary" onclick="prevCuteImg()">◀ Prev</button>
+                <span class="gallery-counter" id="cute-counter">1 / 19</span>
+                <button class="btn btn-secondary" onclick="nextCuteImg()">Next ▶</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: FUNNY PHOTOS GALLERY -->
+        <div class="slide" id="slide-5">
+            <h2>Your Adorable Funny Side 😂</h2>
+            <p>These silly, candid moments are reasons why I fall deeper in love with you every single day!</p>
+
+            <div class="img-container">
+                <img id="funny-img-display" src="IMG_20260609_112920.jpg" alt="Funny Photo" onerror="handleImgError(this, 'funny-fallback')">
+                <div id="funny-fallback" class="img-fallback hidden">
+                    <p>🤪 <strong>Funny Photo Frame</strong></p>
+                    <p id="funny-file-name" style="font-size:0.8rem; color:#aaa;">IMG_20260609_112920.jpg</p>
+                    <label class="file-input-label">Select Photo from Device
+                        <input type="file" class="file-input" accept="image/*" onchange="loadLocalImage(event, 'funny-img-display', 'funny-fallback')">
+                    </label>
+                </div>
+            </div>
+
+            <div class="gallery-controls">
+                <button class="btn btn-secondary" onclick="prevFunnyImg()">◀ Prev</button>
+                <span class="gallery-counter" id="funny-counter">1 / 4</span>
+                <button class="btn btn-secondary" onclick="nextFunnyImg()">Next ▶</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: A HEART-TO-HEART LETTER -->
+        <div class="slide" id="slide-6">
+            <h2>From My Heart To Yours 💌</h2>
+            <p>When you told me last night, <em>"I think you should leave me, You don't understand me,"</em> my heart sank. Even when you said you didn't do anything but were just feeling sad, I knew I had failed to give you the comfort you needed in that moment.</p>
+
+            <p>I want you to know: <strong>I am not going anywhere.</strong> I don't want to defend myself or argue. I just want to be the person you can lean on when things feel heavy.</p>
+
+            <div class="quote-box">
+                "Sometimes you don't need to fix everything right away. Sometimes you just need to stay." And Nannnuuuuuuuu is staying right here with you forever.
+            </div>
+        </div>
+
+        <!-- SLIDE 7: CHECKPOINT (FEELING LOW?) -->
+        <div class="slide" id="slide-7">
+            <h2>Important Checkpoint 💖</h2>
+            <p style="text-align: center; font-size: 1.3rem; margin: 30px 0;">
+                Monuuuuuuuuuu Babyyyyyyyyyyy, are you still feeling low about last night?
+            </p>
+
+            <div class="btn-group">
+                <button class="btn" onclick="answerFeelingLow(true)">Yes, a little bit 🥺</button>
+                <button class="btn btn-secondary" onclick="answerFeelingLow(false)">No, I feel better now 😊</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: THE ULTIMATE PROPOSAL -->
+        <div class="slide" id="slide-8">
+            <h2>The Important Question 💍</h2>
+            <p style="text-align: center; font-size: 1.2rem;" class="highlight">
+                Now, Monuuuuuuuuuu babyyyyyyyyyy, here comes the most important question of all...
+            </p>
+
+            <div class="img-container">
+                <img id="ring-img" src="Nandan ring.png" alt="Paper Ring Proposal" onerror="handleImgError(this, 'ring-fallback')">
+                <div id="ring-fallback" class="img-fallback hidden">
+                    <p>💍 <strong>Nandan's Proposal Photo</strong></p>
+                    <p style="font-size:0.8rem; color:#aaa;">Nandan ring.png</p>
+                    <label class="file-input-label">Select Ring Photo
+                        <input type="file" class="file-input" accept="image/*" onchange="loadLocalImage(event, 'ring-img', 'ring-fallback')">
+                    </label>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 15px;">Will you marry me?</h3>
+
+            <div class="proposal-area" id="proposal-area">
+                <button class="btn" id="yes-btn" onclick="acceptProposal()" style="font-size: 1.3rem; padding: 15px 40px;">YES! 💖</button>
+                <button class="btn btn-secondary" id="no-btn" onmouseover="dodgeNoButton()" onclick="dodgeNoButton()" ontouchstart="dodgeNoButton()">No 😜</button>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: SUCCESS / FINALE -->
+        <div class="slide" id="slide-9">
+            <h1>SHE SAID YES! 🎉💖</h1>
+            <p style="text-align: center; font-size: 1.3rem;" class="highlight">
+                Angya! I love you Monuuuuuuuuuu Babyyyyyyyyyyy I'm ready to marry you looooooooo! 💍✨
+            </p>
+            <p style="text-align: center; margin-top: 20px;">
+                You are my whole world, my heart, and my forever. Thank you for being you, Monuuuuuuuuuu. Nannnuuuuuuuu loves you endlessly!
+            </p>
+            <div class="btn-group">
+                <button class="btn" onclick="goToSlide(1)">Replay Mission 🔄</button>
+            </div>
+        </div>
+
+        <!-- NAVIGATION FOOTER -->
+        <div class="nav-footer" id="nav-footer">
+            <button class="btn btn-secondary" id="prev-btn" onclick="changeSlide(-1)">Back</button>
+            <span id="slide-number" style="align-self: center; font-size: 0.9rem; color: #aaa;">Stage 1 of 8</span>
+            <button class="btn" id="next-btn" onclick="changeSlide(1)">Next ▶</button>
+        </div>
+
+    </div>
+
+    <!-- MODAL POPUPS -->
+    <!-- Hug Modal -->
+    <div class="modal" id="hug-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('hug-modal')">&times;</span>
+            <h3>Deploying Virtual Hug... 🫂</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="hug-progress"></div>
+            </div>
+            <p id="hug-status">Initiating tightness test...</p>
+            <button class="btn" style="margin-top:15px;" onclick="startHugProgress()">Send Hug!</button>
+        </div>
+    </div>
+
+    <!-- Meme Modal -->
+    <div class="modal" id="meme-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('meme-modal')">&times;</span>
+            <h3>Emergency Cat Remedy 🐱</h3>
+            <div class="img-container">
+                <img id="meme-img" src="mona.jpg" alt="Cat Meme" onerror="handleImgError(this, 'meme-fallback')">
+                <div id="meme-fallback" class="img-fallback hidden">
+                    <p>🐱 <strong>Cat Meme</strong></p>
+                    <p style="font-size:0.8rem; color:#aaa;">mona.jpg</p>
+                    <label class="file-input-label">Select Cat Image
+                        <input type="file" class="file-input" accept="image/*" onchange="loadLocalImage(event, 'meme-img', 'meme-fallback')">
+                    </label>
+                </div>
+            </div>
+            <p><em>"phone gira screen hui shatter... tumko pata nahi but you're beautiful and you matter"</em></p>
+        </div>
+    </div>
+
+    <!-- Compliment Modal -->
+    <div class="modal" id="compliment-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('compliment-modal')">&times;</span>
+            <h3>3 Things I Love About You 💖</h3>
+            <ul style="text-align: left; margin: 20px; line-height: 2;">
+                <li>👀 <strong>Your eyes:</strong> I could stare into them forever and get completely lost.</li>
+                <li>❤️ <strong>Your love and care:</strong> The gentle warmth you show me makes me want to be a better person.</li>
+                <li>✨ <strong>You:</strong> Just simply, entirely, unconditionally YOU.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Talk Modal -->
+    <div class="modal" id="talk-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('talk-modal')">&times;</span>
+            <h3>I'm Listening 💬</h3>
+            <p>No defending myself. No interrupting. No trying to force solutions.</p>
+            <p style="margin-top: 15px; font-weight: 600; color: var(--accent);">
+                Whenever you are ready, text me or call me. Tell me everything. Nannnuuuuuuuu is right here listening.
+            </p>
+        </div>
+    </div>
+
+    <!-- Response Modal for Feeling Low -->
+    <div class="modal" id="response-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('response-modal')">&times;</span>
+            <h3 id="response-title">Thank you for telling me 💕</h3>
+            <p id="response-text" style="margin: 20px 0;"></p>
+            <button class="btn" onclick="closeModal('response-modal'); goToSlide(8);">Continue ▶</button>
+        </div>
+    </div>
+
+    <script>
+        // Data arrays for photos
+        const cutePhotos = [
+            "DSC 0587.JPG", "IMG_20250423_092004.jpg", "IMG_20260626_113959.jpg",
+            "IMG_20260626_114540.jpg", "IMG_20260626_121153.jpg", "IMG_20260626_121356.jpg",
+            "IMG_20260722_160437.jpg", "IMG_20260725_094647.jpg", "IMG_20260818_122956.jpg",
+            "IMG_20260822_150949.jpg", "IMG-20260430-WA0010.jpg", "IMG-20260501-WA0034.jpg",
+            "IMG-20260515-WA0010.jpg", "IMG-20260523-WA0006.jpg", "IMG-20260616-WA0014.jpg",
+            "IMG-20260619-WA0003.jpg", "Screenshot 2026-07-23 083406.png",
+            "Screenshot 2026-08-07 133819.png", "Screenshot_2026-06-22-19-35-36-89.jpg"
+        ];
+
+        const funnyPhotos = [
+            "IMG_20260609_112920.jpg", "IMG_20260706_211621.jpg",
+            "IMG-20260507-WA0003.jpg", "WIN_20260829_20_41_40_Pro.jpg"
+        ];
+
+        let currentSlide = 1;
+        const totalSlides = 8; // Excluding final success slide 9 from counter
+
+        let cuteIdx = 0;
+        let funnyIdx = 0;
+
+        // Slide Navigation
+        function updateSlideView() {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const activeSlide = document.getElementById(`slide-${currentSlide}`);
+            if (activeSlide) activeSlide.classList.add('active');
+
+            const footer = document.getElementById('nav-footer');
+            if (currentSlide === 9) {
+                footer.classList.add('hidden');
+            } else {
+                footer.classList.remove('hidden');
+                document.getElementById('slide-number').innerText = `Stage ${currentSlide} of ${totalSlides}`;
+                document.getElementById('prev-btn').style.visibility = currentSlide === 1 ? 'hidden' : 'visible';
+                
+                // Hide Next on proposal slide so she uses the proposal buttons
+                if (currentSlide === 8) {
+                    document.getElementById('next-btn').classList.add('hidden');
+                } else {
+                    document.getElementById('next-btn').classList.remove('hidden');
+                }
+            }
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            updateSlideView();
+        }
+
+        function goToSlide(slideNum) {
+            currentSlide = slideNum;
+            updateSlideView();
+        }
+
+        // Image Handling and Fallbacks
+        function handleImgError(imgEl, fallbackId) {
+            imgEl.style.display = 'none';
+            document.getElementById(fallbackId).classList.remove('hidden');
+        }
+
+        function loadLocalImage(event, imgId, fallbackId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(imgId);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById(fallbackId).classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Cute Gallery Controls
+        function updateCuteGallery() {
+            const img = document.getElementById('cute-img-display');
+            const fallback = document.getElementById('cute-fallback');
+            const counter = document.getElementById('cute-counter');
+            const fileNameLabel = document.getElementById('cute-file-name');
+
+            img.style.display = 'block';
+            fallback.classList.add('hidden');
+            img.src = cutePhotos[cuteIdx];
+            fileNameLabel.innerText = cutePhotos[cuteIdx];
+            counter.innerText = `${cuteIdx + 1} / ${cutePhotos.length}`;
+        }
+
+        function prevCuteImg() {
+            cuteIdx = (cuteIdx - 1 + cutePhotos.length) % cutePhotos.length;
+            updateCuteGallery();
+        }
+
+        function nextCuteImg() {
+            cuteIdx = (cuteIdx + 1) % cutePhotos.length;
+            updateCuteGallery();
+        }
+
+        // Funny Gallery Controls
+        function updateFunnyGallery() {
+            const img = document.getElementById('funny-img-display');
+            const fallback = document.getElementById('funny-fallback');
+            const counter = document.getElementById('funny-counter');
+            const fileNameLabel = document.getElementById('funny-file-name');
+
+            img.style.display = 'block';
+            fallback.classList.add('hidden');
+            img.src = funnyPhotos[funnyIdx];
+            fileNameLabel.innerText = funnyPhotos[funnyIdx];
+            counter.innerText = `${funnyIdx + 1} / ${funnyPhotos.length}`;
+        }
+
+        function prevFunnyImg() {
+            funnyIdx = (funnyIdx - 1 + funnyPhotos.length) % funnyPhotos.length;
+            updateFunnyGallery();
+        }
+
+        function nextFunnyImg() {
+            funnyIdx = (funnyIdx + 1) % funnyPhotos.length;
+            updateFunnyGallery();
+        }
+
+        // Modals
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Hug Progress Bar
+        function startHugProgress() {
+            const bar = document.getElementById('hug-progress');
+            const status = document.getElementById('hug-status');
+            bar.style.width = '0%';
+            status.innerText = "Deploying warmth...";
+
+            setTimeout(() => { bar.style.width = '40%'; status.innerText = "Wrapping around Monuuuuuuuuuu..."; }, 300);
+            setTimeout(() => { bar.style.width = '80%'; status.innerText = "Squeezing gently..."; }, 800);
+            setTimeout(() => { bar.style.width = '100%'; status.innerText = "Hug delivered 100%! Side effects: feeling loved 💕"; }, 1300);
+        }
+
+        // Feeling Low Response Checkpoint
+        function answerFeelingLow(isLow) {
+            const title = document.getElementById('response-title');
+            const text = document.getElementById('response-text');
+
+            if (isLow) {
+                title.innerText = "I'm right here with you 🥺💗";
+                text.innerText = "It's completely okay to take your time. I love you so much Monuuuuuuuuuu, and I will do everything to make you feel cherished and safe.";
+            } else {
+                title.innerText = "That makes my heart so happy! 😊✨";
+                text.innerText = "Seeing you feel lighter means the world to me, Monuuuuuuuuuu. Now... there is one last very important thing I want to ask you!";
+            }
+            openModal('response-modal');
+        }
+
+        // Evasive No Button Logic
+        function dodgeNoButton() {
+            const btn = document.getElementById('no-btn');
+            const area = document.getElementById('proposal-area');
+            const areaRect = area.getBoundingClientRect();
+
+            const maxX = areaRect.width - btn.offsetWidth - 20;
+            const maxY = areaRect.height - btn.offsetHeight - 20;
+
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+            btn.style.left = `${randomX}px`;
+            btn.style.top = `${randomY}px`;
+        }
+
+        // Proposal Acceptance & Confetti
+        function acceptProposal() {
+            goToSlide(9);
+            launchConfetti();
+        }
+
+        // Simple Confetti Animation
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffb703', '#ffffff'];
+
+            for (let i = 0; i < 150; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 5 + 2,
+                    angle: Math.random() * 360
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    p.y += p.speed;
+                    p.x += Math.sin(p.angle) * 2;
+                    if (p.y > canvas.height) p.y = -10;
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // Initialize view
+        updateSlideView();
+    </script>
+</body>
+</html>
